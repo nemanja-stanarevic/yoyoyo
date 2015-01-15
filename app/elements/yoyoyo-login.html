@@ -8,9 +8,8 @@
 
 <link rel="import" href="/bower_components/firebase-element/firebase-element.html">
 <link rel="import" href="/bower_components/firebase-element/firebase-login.html">
-<link rel="import" href="/bower_components/pvc-globals/pvc-globals.html">
 
-<polymer-element name="yoyoyo-login">
+<polymer-element name="yoyoyo-login" attributes="currentUserId">
   <template>
     <style>
       paper-button /deep/ core-icon[role=img] {
@@ -25,7 +24,6 @@
         white-space: nowrap;
       }
     </style>
-    <pvc-globals values="{{globals}}"></pvc-globals>
 
     <template if="{{!user}}">
       <paper-button on-click="{{login}}">
@@ -77,12 +75,12 @@
           "timestamp": Firebase.ServerValue.TIMESTAMP
         });
 
-        this.globals.uid = this.user.uid;
+        this.currentUserId = this.user.uid;
       },
       onLogout: function() {
         var sessions = new Firebase('https://yoyoyo.firebaseio.com/sessions')
-        sessions.child(this.globals.uid).remove();
-        this.globals.uid = '';
+        sessions.child(this.currentUserId).remove();
+        this.currentUserId = '';
       }
     });
 

@@ -5,9 +5,8 @@
 <link rel="import" href="/bower_components/core-icons/social-icons.html">
 
 <link rel="import" href="/bower_components/firebase-element/firebase-element.html">
-<link rel="import" href="/bower_components/pvc-globals/pvc-globals.html">
 
-<polymer-element name="yoyoyo-people">
+<polymer-element name="yoyoyo-people" attributes="currentUserId">
   <template>
     <style>
       paper-item {
@@ -22,24 +21,24 @@
       }
     </style>
 
-    <pvc-globals values="{{globals}}"></pvc-globals>
-
-    <firebase-element
-      id="base"
-      location="https://yoyoyo.firebaseio.com/sessions"
-      data="{{sessions}}"
-      keys="{{keys}}"></firebase-element>
-
-    <core-menu selectedAttribute="">
-      <template repeat="{{id in keys}}">
-        <template if="{{id != globals.uid}}">
-          <paper-item on-click="{{yoyoyoPerson}}" data-uid="{{id}}">
-            <core-icon src="{{sessions[id]['avatar']}}"></core-icon>
-            {{sessions[id]['name']}}
-          </paper-item>
+    <template if="{{currentUserId}}">
+      <firebase-element
+        id="base"
+        location="https://yoyoyo.firebaseio.com/sessions"
+        data="{{sessions}}"
+        keys="{{keys}}"></firebase-element>
+        
+      <core-menu selectedAttribute="">
+        <template repeat="{{id in keys}}">
+          <template if="{{id != currentUserId}}">
+            <paper-item on-click="{{yoyoyoPerson}}" data-uid="{{id}}">
+              <core-icon src="{{sessions[id]['avatar']}}"></core-icon>
+              {{sessions[id]['name']}}
+            </paper-item>
+          </template>
         </template>
-      </template>
-    </core-menu>
+      </core-menu>
+    </template>
   </template>
   <script>
   (function () {
@@ -47,7 +46,7 @@
 
     Polymer({
       yoyoyoPerson: function(event, detail, sender) {
-        var senderUid = this.globals.uid;
+        var senderUid = this.currentUserId;
         var recipientUid = sender.attributes['data-uid'].value;
 
         var messages = new Firebase('https://yoyoyo.firebaseio.com/messages')
@@ -66,7 +65,6 @@
           "content": "Yo Yo Yo!",
           "timestamp": Firebase.ServerValue.TIMESTAMP
         });
-
       }
     });
 

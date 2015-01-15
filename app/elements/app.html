@@ -25,16 +25,16 @@
     <core-drawer-panel id="drawerPanel" narrow="{{narrow}}">
       <core-header-panel drawer>
         <core-toolbar><span>Yo Yo Yo!</span></core-toolbar>
-        <yoyoyo-people></yoyoyo-people>
+        <yoyoyo-people currentUserId="{{currentUserId}}"></yoyoyo-people>
       </core-header-panel>
       <core-header-panel main>
         <core-toolbar>
           <core-icon-button icon="menu" core-drawer-toggle></core-icon-button>
           <div flex> </div>
-          <yoyoyo-login halign="right"></yoyoyo-login>
+          <yoyoyo-login currentUserId="{{currentUserId}}" halign="right"></yoyoyo-login>
         </core-toolbar>
         <div>
-          <yoyoyo-list></yoyoyo-list>
+          <yoyoyo-list currentUserId="{{currentUserId}}"></yoyoyo-list>
         </div>
       </core-header-panel>
     </core-drawer-panel>
@@ -46,7 +46,7 @@
 
       Polymer({
         ready: function() {
-
+          this.currentUserId = '';
         }
       });
 
