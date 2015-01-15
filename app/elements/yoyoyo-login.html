@@ -1,0 +1,91 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/paper-dropdown/paper-dropdown.html">
+<link rel="import" href="/bower_components/core-menu/core-menu.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="/bower_components/firebase-element/firebase-element.html">
+<link rel="import" href="/bower_components/firebase-element/firebase-login.html">
+<link rel="import" href="/bower_components/pvc-globals/pvc-globals.html">
+
+<polymer-element name="yoyoyo-login">
+  <template>
+    <style>
+      paper-button /deep/ core-icon[role=img] {
+        height: 36px;
+        width: 36px;
+      }
+      paper-item {
+        color: #333;
+      }
+      paper-button {
+        font-size: 24px;
+        white-space: nowrap;
+      }
+    </style>
+    <pvc-globals values="{{globals}}"></pvc-globals>
+
+    <template if="{{!user}}">
+      <paper-button on-click="{{login}}">
+        <core-icon src="/images/github.png"></core-icon>
+        Signin with GitHub
+      </paper-button>
+    </template>
+
+    <template if="{{user}}">
+      <paper-menu-button halign="right">
+        <paper-button>
+          <core-icon src="{{user.github.cachedUserProfile.avatar_url}}"></core-icon>
+          {{user.github.displayName || user.github.username}}
+        </paper-button>
+        <paper-dropdown class="dropdown" transition="">
+          <core-menu class="menu">
+            <paper-item on-click="{{logout}}">Logout</paper-item>
+          </core-menu>
+        </paper-dropdown>
+      </paper-menu-button>
+    </template>
+
+    <firebase-login
+      id="baseLogin"
+      user="{{user}}"
+      location="https://yoyoyo.firebaseio.com"
+      provider="github"
+      on-login="{{onLogin}}"
+      on-logout="{{onLogout}}"></firebase-login>
+
+  </template>
+  <script>
+  (function () {
+    'use strict';
+
+    Polymer({
+      login: function() {
+        this.$.baseLogin.login();
+      },
+      logout: function() {
+        this.$.baseLogin.logout();
+      },
+      onLogin: function() {
+        var sessions = new Firebase('https://yoyoyo.firebaseio.com/sessions')
+        sessions.child(this.user.uid).set({
+          "name": this.user.github.displayName || this.user.github.username,
+          "userName": this.user.github.username,
+          "avatar": this.user.github.cachedUserProfile.avatar_url,
+          "timestamp": Firebase.ServerValue.TIMESTAMP
+        });
+
+        this.globals.uid = this.user.uid;
+      },
+      onLogout: function() {
+        var sessions = new Firebase('https://yoyoyo.firebaseio.com/sessions')
+        sessions.child(this.globals.uid).remove();
+        this.globals.uid = '';
+      }
+    });
+
+  })();
+  </script>
+</polymer-element>

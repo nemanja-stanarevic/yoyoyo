@@ -1,0 +1,75 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/core-menu/core-menu.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/core-icons/social-icons.html">
+
+<link rel="import" href="/bower_components/firebase-element/firebase-element.html">
+<link rel="import" href="/bower_components/pvc-globals/pvc-globals.html">
+
+<polymer-element name="yoyoyo-people">
+  <template>
+    <style>
+      paper-item {
+        color: #757575;
+      }
+      core-icon {
+        margin-right: 10px !important;
+      }
+
+      paper-item.core-selected {
+        background-color: #eee;
+      }
+    </style>
+
+    <pvc-globals values="{{globals}}"></pvc-globals>
+
+    <firebase-element
+      id="base"
+      location="https://yoyoyo.firebaseio.com/sessions"
+      data="{{sessions}}"
+      keys="{{keys}}"></firebase-element>
+
+    <core-menu selectedAttribute="">
+      <template repeat="{{id in keys}}">
+        <template if="{{id != globals.uid}}">
+          <paper-item on-click="{{yoyoyoPerson}}" data-uid="{{id}}">
+            <core-icon src="{{sessions[id]['avatar']}}"></core-icon>
+            {{sessions[id]['name']}}
+          </paper-item>
+        </template>
+      </template>
+    </core-menu>
+  </template>
+  <script>
+  (function () {
+    'use strict';
+
+    Polymer({
+      yoyoyoPerson: function(event, detail, sender) {
+        var senderUid = this.globals.uid;
+        var recipientUid = sender.attributes['data-uid'].value;
+
+        var messages = new Firebase('https://yoyoyo.firebaseio.com/messages')
+        messages.child(recipientUid).push({
+          "direction": "in",
+          "senderName": this.sessions[senderUid]['name'],
+          "senderAvatar": this.sessions[senderUid]['avatar'],
+          "content": "Yo Yo Yo!",
+          "timestamp": Firebase.ServerValue.TIMESTAMP
+        });
+
+        messages.child(senderUid).push({
+          "direction": "out",
+          "recipientName": this.sessions[recipientUid]['name'],
+          "recipientAvatar": this.sessions[recipientUid]['avatar'],
+          "content": "Yo Yo Yo!",
+          "timestamp": Firebase.ServerValue.TIMESTAMP
+        });
+
+      }
+    });
+
+  })();
+  </script>
+</polymer-element>
