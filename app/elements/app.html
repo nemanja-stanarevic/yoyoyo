@@ -5,7 +5,7 @@
 
 <link rel="import" href="/elements/yoyoyo-people.html">
 <link rel="import" href="/elements/yoyoyo-login.html">
-<link rel="import" href="/elements/yoyoyo-list.html">
+<link rel="import" href="/elements/yoyoyo-messages.html">
 
 <polymer-element name="yoyoyo-app">
   <template>
@@ -34,7 +34,7 @@
           <yoyoyo-login currentUserId="{{currentUserId}}" halign="right"></yoyoyo-login>
         </core-toolbar>
         <div>
-          <yoyoyo-list currentUserId="{{currentUserId}}"></yoyoyo-list>
+          <yoyoyo-messages currentUserId="{{currentUserId}}"></yoyoyo-list>
         </div>
       </core-header-panel>
     </core-drawer-panel>
