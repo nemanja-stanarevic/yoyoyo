@@ -1,0 +1,29 @@
+{
+  "sessions" : {
+    "<firebase-generated user id>" : {
+      "name" : "<github name>",
+      "userName" : "<github user name>",
+      "avatar" : "<github avatar>",
+      "timestamp" : 1421356591855
+    }
+  },
+
+  "messages" : {
+    "<user id>" : {
+      "<firebase-generated message gui>" : {
+        "direction" : "in",
+        "senderName" : "<github name or user name>",
+        "senderAvatar" : "<github avatar url>",
+        "content" : "Yo Yo Yo!",
+        "timestamp" : 1421356595877
+      },
+      "<message gui>" : {
+        "direction" : "out",
+        "recipientName" : "<github name or user name>",
+        "recipientAvatar" : "<github avatar url>",
+        "content" : "Yo Yo Yo!",
+        "timestamp" : 1421356593797
+      }
+    }
+  }
+}
